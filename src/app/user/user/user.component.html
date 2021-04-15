@@ -1,0 +1,32 @@
+<ng-container *ngIf="!loading">
+    <h1 class="mat-h1">Your details are:</h1>
+    <mat-card class="card">
+        <div class="icon-container">
+            <div class="big-icon">
+                <mat-icon aria-hidden="true" color="primary" inline="true">person</mat-icon>
+            </div>
+        </div>
+        <div class="content-container">
+            <div class="title">
+                <h2>{{user.name}}</h2>
+            </div>
+            <div class="details">
+                <div>
+                    <p>Born on {{user.dob | date}}</p>
+                    <p>{{user.age}} years old</p>
+                    <p>{{user.gender}}</p>
+                </div>
+                <div>
+                    <p class="flex-aligned-display">
+                        <mat-icon>smartphone</mat-icon>
+                        <span>{{user.phone}}</span>
+                    </p>
+                    <p class="flex-aligned-display">
+                        <mat-icon>email</mat-icon>
+                        <span>{{user.email}}</span>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </mat-card>
+</ng-container>

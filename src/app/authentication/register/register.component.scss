@@ -1,0 +1,21 @@
+.flex-column-container { align-items: center; }
+
+.card { width: 500px; }
+
+.transparent-card { margin-top: 20px; }
+
+.register-btn { margin: 10px 0px; }
+
+.radio {
+    border: 1px solid rgba(0, 0, 0, .12);
+    border-radius: 5px;
+    padding: 15px 10px;
+    margin: 3px 0px 20px;
+}
+
+.radio-group {
+    display: flex;
+    margin-top: 10px;
+
+    & > .radio-btn { margin-right: 20px; }
+}

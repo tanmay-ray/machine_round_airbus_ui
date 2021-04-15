@@ -1,0 +1,41 @@
+.icon-container {
+    position: relative;
+    height: 100%;
+    width: 200px;
+
+    .big-icon {
+        font-size: 300px;
+        position: absolute;
+        top: 50%;
+        margin-top: -10px;
+        margin-left: -50px;
+    }
+}
+
+.card {
+    width: 600px;
+    height: 200px;
+
+    .content-container {
+        width: 384px;
+        position: absolute;
+        top: 16px;
+        left: 216px;
+        padding: 0px 16px;
+
+        .title, .details { display: flex; }
+        .title { justify-content: space-between; }
+        .details { 
+            & > * { padding-right: 16px; }
+        }
+    }
+}
+
+.flex-aligned-display {
+    display: flex;
+    align-items: center;
+
+    & > .item {
+        margin-right: 10px;
+    }
+}
