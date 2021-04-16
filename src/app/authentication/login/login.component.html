@@ -1,5 +1,8 @@
 <div class="flex-column-container">
     <h1 class="mat-h1">Sign in</h1>
+    <mat-card *ngIf="loginError" class="card transparent-card error border">
+        <p>Invalid email or password</p>
+    </mat-card>
     <mat-card class="card">
         <mat-card-content>
             <form #loginForm="ngForm">
@@ -24,8 +27,8 @@
                     </mat-form-field>
                 </div>
 
-                <button mat-flat-button color="primary" class="full-width login-btn"
-                    [disabled]="loginForm.invalid" (click)="login()">Login</button>
+                <button mat-flat-button color="primary" class="full-width login-btn" [disabled]="loginForm.invalid"
+                    (click)="login()">Login</button>
             </form>
         </mat-card-content>
     </mat-card>

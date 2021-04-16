@@ -9,8 +9,8 @@ export class UserService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getUser(userId: number) {
-    return this.httpClient.get<User>(`http://localhost:8080/user/${userId}`);
+  getUser(email: string) {
+    return this.httpClient.get<User>(`http://localhost:8080/user/${email}`);
   }
 
   getUserList() {

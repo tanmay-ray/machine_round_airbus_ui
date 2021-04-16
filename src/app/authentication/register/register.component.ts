@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { EMPTY } from 'rxjs';
+import { catchError, filter, take } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -12,6 +14,7 @@ export class RegisterComponent implements OnInit {
 
   hide = true;
   hideConfirmPass = true;
+  registerError = false
   registerForm: FormGroup;
   confirmPass: FormControl;
   maxDate = new Date();
@@ -38,9 +41,16 @@ export class RegisterComponent implements OnInit {
   }
 
   createUser() {
-    this.authService.createUser(this.registerForm.value).subscribe(
-      userId => this.router.navigate(['user'], { state: { userId } })
-    );
+    this.registerError = false;
+    this.authService.createUser(this.registerForm.value).pipe(catchError(err => {
+      console.error(err);
+      this.registerError = true;
+      return EMPTY;
+    })).subscribe();
+
+    this.authService.getLoggedInUser().pipe(filter(user => !!user), take(1)).subscribe(user => {
+      this.router.navigate(['user'], { state: { email: user?.email } });
+    });
   }
 
 }

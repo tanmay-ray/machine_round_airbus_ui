@@ -1,6 +1,9 @@
 <div class="flex-column-container">
     <h1 class="mat-h1">Create your account</h1>
 
+    <mat-card *ngIf="registerError" class="card transparent-card error border">
+        <p>We hit a snag while creating your account. Please verify your details and try again.</p>
+    </mat-card>
     <mat-card class="card">
         <mat-card-content>
             <form [formGroup]="registerForm">

@@ -11,17 +11,17 @@ import { UserService } from '../user.service';
 })
 export class UserComponent implements OnInit {
   user: User;
-  userId: number;
+  email: string;
   loading: boolean;
 
   constructor(private userService: UserService, router: Router) {
-    this.userId = router.getCurrentNavigation()?.extras?.state?.userId;
-    this.loading = !!this.userId;
+    this.email = router.getCurrentNavigation()?.extras?.state?.email;
+    this.loading = !!this.email;
   }
 
   ngOnInit(): void {
     if (this.loading) {
-      this.userService.getUser(this.userId)
+      this.userService.getUser(this.email)
         .pipe(finalize(() => this.loading = false))
         .subscribe(user => this.user = user);
     }
