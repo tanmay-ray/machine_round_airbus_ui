@@ -26,11 +26,9 @@ export class LoginComponent implements OnInit {
       console.error(err);
       this.loginError = true;
       return EMPTY;
-    })).subscribe();
-
-    this.authService.getLoggedInUser().pipe(filter(user => !!user), take(1)).subscribe(user => {
-      if (user?.isAdmin) this.router.navigate(['users']);
-      else this.router.navigate(['user'], { state: { email: user?.email } });
+    })).subscribe(() => {
+      const loggedInUser = this.authService.getLoggedInUser();
+      this.router.navigate([loggedInUser?.isAdmin ? 'users' : 'user']);
     });
   }
 

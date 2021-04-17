@@ -14,48 +14,38 @@ interface UserAuthResponse {
 })
 export class AuthService {
   private baseUrl = environment.baseUrl;
-  private _loggedUser$ = new BehaviorSubject<{ email: string, isAdmin: boolean } | null>(null);
 
   constructor(private httpClient: HttpClient) { }
 
-  private setSession(jwt: string) {
+  private setLoggedInUser(jwt: string) {
     sessionStorage.setItem("jwt", jwt);
-  }
-
-  private setLoggedUser() {
-    const jwt = sessionStorage.getItem("jwt");
-    let user = null;
-    if (jwt) {
-      user = JSON.parse(atob(jwt.split('.')[1]));
-      const isAdmin = (user?.auth as any[] || []).some(auth => auth?.authority === 'ADMIN');
-      user = { email: user.sub, isAdmin };
-    }
-
-    this._loggedUser$.next(user);
-  }
-
-  private reqPostProcessor(res: Observable<UserAuthResponse>) {
-    return res.pipe(tap(({ jwt }) => {
-      this.setSession(jwt);
-      this.setLoggedUser();
-    }));
   }
 
   createUser(user: NewUser) {
     const url = `${this.baseUrl}/register`;
-    return this.reqPostProcessor(this.httpClient.post<UserAuthResponse>(url, user));
+    return this.httpClient.post<UserAuthResponse>(url, user)
+      .pipe(tap(({ jwt }) => this.setLoggedInUser(jwt)));
 
   }
 
   authenticate(user: UserAuth) {
     const url = `${this.baseUrl}/authenticate`;
-    return this.reqPostProcessor(this.httpClient.post<UserAuthResponse>(url, user));
+    return this.httpClient.post<UserAuthResponse>(url, user)
+      .pipe(tap(({ jwt }) => this.setLoggedInUser(jwt)));
+  }
+
+  getLoggedInUser() {
+    const jwt = sessionStorage.getItem('jwt');
+    let user;
+    if (jwt) {
+      user = JSON.parse(atob(jwt.split('.')[1]));
+      const isAdmin = (user?.auth as any[] || []).some(auth => auth?.authority === 'ADMIN');
+      user = { email: user.sub, isAdmin };
+    }
+    return user;
   }
 
   logOut() {
     sessionStorage.removeItem('jwt');
-    this.setLoggedUser();
   }
-
-  getLoggedInUser() { return this._loggedUser$.asObservable(); }
 }

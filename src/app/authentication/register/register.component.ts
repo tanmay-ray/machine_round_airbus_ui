@@ -46,10 +46,9 @@ export class RegisterComponent implements OnInit {
       console.error(err);
       this.registerError = true;
       return EMPTY;
-    })).subscribe();
-
-    this.authService.getLoggedInUser().pipe(filter(user => !!user), take(1)).subscribe(user => {
-      this.router.navigate(['user'], { state: { email: user?.email } });
+    })).subscribe(() => {
+      const loggedInUser = this.authService.getLoggedInUser();
+      this.router.navigate([loggedInUser?.isAdmin ? 'users' : 'user']);
     });
   }
 

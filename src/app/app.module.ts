@@ -7,6 +7,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { AuthenticationModule } from './authentication/authentication.module';
 import { UserModule } from './user/user.module';
+import { AuthInterceptorService } from './service/auth-interceptor.service';
+import { HTTP_INTERCEPTORS } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -19,10 +21,17 @@ import { UserModule } from './user/user.module';
     AuthenticationModule,
     UserModule
   ],
-  providers: [{
-    provide: MAT_RADIO_DEFAULT_OPTIONS,
-    useValue: { color: 'primary' },
-  }],
+  providers: [
+    {
+      provide: MAT_RADIO_DEFAULT_OPTIONS,
+      useValue: { color: 'primary' },
+    },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: AuthInterceptorService,
+      multi: true
+    }
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { User } from '../../model/user.model';
 import { UserService } from '../user.service';
@@ -11,17 +11,17 @@ import { UserService } from '../user.service';
 })
 export class UserComponent implements OnInit {
   user: User;
-  email: string;
+  loggedUser: { email: string, isAdmin: boolean };
   loading: boolean;
 
-  constructor(private userService: UserService, router: Router) {
-    this.email = router.getCurrentNavigation()?.extras?.state?.email;
-    this.loading = !!this.email;
+  constructor(private userService: UserService, route: ActivatedRoute) {
+    this.loggedUser = route.snapshot.data?.loggedInUser;
+    this.loading = !!this.loggedUser;
   }
 
   ngOnInit(): void {
     if (this.loading) {
-      this.userService.getUser(this.email)
+      this.userService.getUser(this.loggedUser.email)
         .pipe(finalize(() => this.loading = false))
         .subscribe(user => this.user = user);
     }
