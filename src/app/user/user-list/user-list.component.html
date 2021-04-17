@@ -1,1 +1,51 @@
-<p>user-list works!</p>
+<div class="container" *ngIf="!loadingError; errorTemplate">
+    <h1 class="mat-display-2 title">Below are all your users:</h1>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Search by email</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="yourname@example.com" #input>
+    </mat-form-field>
+
+    <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" matSort>
+
+            <ng-container matColumnDef="name">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Name </th>
+                <td mat-cell *matCellDef="let user"> {{user.name}} </td>
+            </ng-container>
+            <ng-container matColumnDef="dob">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Date of birth </th>
+                <td mat-cell *matCellDef="let user"> {{user.dob}} </td>
+            </ng-container>
+            <ng-container matColumnDef="gender">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Gender </th>
+                <td mat-cell *matCellDef="let user"> {{user.gender}} </td>
+            </ng-container>
+            <ng-container matColumnDef="age">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Age </th>
+                <td mat-cell *matCellDef="let user"> {{user.age}} </td>
+            </ng-container>
+            <ng-container matColumnDef="email">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Email </th>
+                <td mat-cell *matCellDef="let user"> {{user.email}} </td>
+            </ng-container>
+            <ng-container matColumnDef="phone">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header> Phone </th>
+                <td mat-cell *matCellDef="let user"> {{user.phone}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let user; columns: displayedColumns;" class="clickable"
+                (click)="openUserDetails(user)"></tr>
+        </table>
+        <div class="no-data-row" *ngIf="dataSource?.filteredData.length === 0">
+            There are no users with email address {{input.value}}
+        </div>
+
+        <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]"></mat-paginator>
+    </div>
+</div>
+
+<ng-template #errorTemplate>
+    <p class="mat-display-3 title">Oops!! We've hit a snag. Please try after some time.</p>
+</ng-template>

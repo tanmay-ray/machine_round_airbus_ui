@@ -1,0 +1,25 @@
+.container {
+    width: 800px;
+}
+
+table, mat-form-field {
+    width: 100%;
+}
+
+::ng-deep .mat-form-field-outline {
+    background-color: white;
+    border-radius: 5px;
+}
+
+.clickable:hover {
+    background-color: whitesmoke;
+}
+
+.no-data-row {
+    height: 48px;
+    background-color: white;
+    border-bottom: 1px solid rgb(221 221 221);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

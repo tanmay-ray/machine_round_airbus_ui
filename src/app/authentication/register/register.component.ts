@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
-import { catchError, filter, take } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -18,7 +18,28 @@ export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
   confirmPass: FormControl;
   maxDate = new Date();
-  passwordMsg = 'Password must be alteast 8 characters long having only alphanumeric characters and special characters (!,@,#,$). It must have atleast one lower and one upper case characters and atleast one digit.';
+
+  passwordPatternValidators = [
+    Validators.pattern(/^[A-Za-z0-9!@#$]{8,}$/),
+    Validators.pattern(/[A-Z]/),
+    Validators.pattern(/[a-z]/),
+    Validators.pattern(/[0-9]/),
+    Validators.pattern(/[!@#$]/),
+  ];
+
+  confirmPassValidator: ValidatorFn = (control: AbstractControl) => {
+    if (!control.value) return null;
+    else if (control.value === this.registerForm.value?.password) return null;
+    else return { confirmPwdMatch: true };
+  }
+
+  emailValidator: AsyncValidatorFn = (control: AbstractControl) => {
+    return this.authService.isValidEmail(control.value).pipe(map(valid => valid ? null : { duplicateEmail: true }));
+  }
+
+  passwordMsg = `Password must be alteast 8 characters long having only alphanumeric 
+  characters and special characters (!,@,#,$). It must have atleast one of each characters
+  out of lower case, upper case characters, digits and allowed special characters.`;
 
   constructor(private authService: AuthService, private router: Router) {
     this.createRegistrationForm();
@@ -33,11 +54,15 @@ export class RegisterComponent implements OnInit {
       dob: new FormControl('', Validators.required),
       gender: new FormControl('', Validators.required),
       phone: new FormControl(''),
-      email: new FormControl('', Validators.required),
-      password: new FormControl('', [Validators.required])
+      password: new FormControl('', [Validators.required, ...this.passwordPatternValidators]),
+      email: new FormControl('', {
+        updateOn: 'blur',
+        validators: [Validators.required, Validators.email],
+        asyncValidators: [this.emailValidator]
+      })
     });
 
-    this.confirmPass = new FormControl('', [Validators.required]);
+    this.confirmPass = new FormControl('', [Validators.required, this.confirmPassValidator]);
   }
 
   createUser() {

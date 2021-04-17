@@ -21,6 +21,11 @@ export class AuthService {
     sessionStorage.setItem("jwt", jwt);
   }
 
+  isValidEmail(email: string) {
+    const url = `${this.baseUrl}/is-valid-email/${email}`;
+    return this.httpClient.get<boolean>(url);
+  }
+
   createUser(user: NewUser) {
     const url = `${this.baseUrl}/register`;
     return this.httpClient.post<UserAuthResponse>(url, user)
@@ -45,7 +50,7 @@ export class AuthService {
     return user;
   }
 
-  logOut() {
+  logout() {
     sessionStorage.removeItem('jwt');
   }
 }

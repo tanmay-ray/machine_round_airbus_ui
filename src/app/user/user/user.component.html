@@ -1,6 +1,6 @@
-<ng-container *ngIf="!loading">
-    <ng-container *ngIf="user; else errTemplate">
-        <h1 class="mat-h1">Your details are:</h1>
+<ng-container *ngIf="!loadingError; errorTemplate">
+    <h1 class="mat-display-2 title">Your details are:</h1>
+    <ng-container *ngIf="!loading">
         <mat-card class="card">
             <div class="icon-container">
                 <div class="big-icon">
@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="content-container">
-                <div class="title">
+                <div class="card-title">
                     <h2>{{user.name}}</h2>
                 </div>
                 <div class="details">
@@ -30,11 +30,15 @@
                 </div>
             </div>
         </mat-card>
+        
+        <a *ngIf="isAdmin" mat-raised-button routerLink="../users">
+            <span class="center-align">
+                <mat-icon>arrow_back</mat-icon><span> Go back to users list</span>
+            </span>
+        </a>
     </ng-container>
 </ng-container>
 
-<ng-template #errTemplate>
-    <mat-card class="transparent-card error border">
-        <p>Oops!! We hit a snag. Please try after some time.</p>
-    </mat-card>
+<ng-template #errorTemplate>
+    <p class="mat-display-3 title">Oops!! We've hit a snag. Please try after some time.</p>
 </ng-template>

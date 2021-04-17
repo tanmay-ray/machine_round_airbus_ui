@@ -11,19 +11,26 @@ import { UserService } from '../user.service';
 })
 export class UserComponent implements OnInit {
   user: User;
-  loggedUser: { email: string, isAdmin: boolean };
+  email: string;
+  isAdmin: boolean;
   loading: boolean;
+  loadingError: boolean;
 
   constructor(private userService: UserService, route: ActivatedRoute) {
-    this.loggedUser = route.snapshot.data?.loggedInUser;
-    this.loading = !!this.loggedUser;
+    this.isAdmin = route.snapshot.data.loggedInUser.isAdmin;
+    this.email = route.snapshot.queryParams?.user || route.snapshot.data.loggedInUser.email;
+    this.loading = !!this.email;
+    this.loadingError = !this.loading;
   }
 
   ngOnInit(): void {
     if (this.loading) {
-      this.userService.getUser(this.loggedUser.email)
+      this.userService.getUser(this.email)
         .pipe(finalize(() => this.loading = false))
-        .subscribe(user => this.user = user);
+        .subscribe(user => this.user = user, err => {
+          console.error(err);
+          this.loadingError = true;
+        });
     }
   }
 

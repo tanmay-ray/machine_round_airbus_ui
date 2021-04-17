@@ -1,9 +1,10 @@
 <div class="flex-column-container">
-    <h1 class="mat-h1">Create your account</h1>
+    <h1 class="mat-display-2 title">Create your account</h1>
 
     <mat-card *ngIf="registerError" class="card transparent-card error border">
-        <p>We hit a snag while creating your account. Please verify your details and try again.</p>
+        <p>We've hit a snag while creating your account. Please verify your details and try again.</p>
     </mat-card>
+
     <mat-card class="card">
         <mat-card-content>
             <form [formGroup]="registerForm">
@@ -12,6 +13,7 @@
                         <mat-label>Your name</mat-label>
                         <input matInput type="email" formControlName="name" required>
                         <mat-icon matSuffix>person</mat-icon>
+                        <mat-error *ngIf="registerForm.controls.name.errors?.required">You must enter a value</mat-error>
                     </mat-form-field>
                 </div>
 
@@ -21,12 +23,13 @@
                         <input matInput [matDatepicker]="picker" formControlName="dob" [max]="maxDate" required>
                         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                         <mat-datepicker #picker></mat-datepicker>
+                        <mat-error *ngIf="registerForm.controls.dob.errors?.required">You must enter a value</mat-error>
                     </mat-form-field>
                 </div>
 
                 <div class="radio">
-                    <label id="gender">What is your gender?</label>
-                    <mat-radio-group aria-labelledby="gender" class="radio-group" formControlName="gender" required>
+                    <label id="gender">What is your gender? *</label>
+                    <mat-radio-group aria-labelledby="gender" class="radio-group" formControlName="gender">
                         <mat-radio-button class="radio-btn" value="Male">Male</mat-radio-button>
                         <mat-radio-button class="radio-btn" value="Female">Female</mat-radio-button>
                         <mat-radio-button class="radio-btn" value="Other">Other</mat-radio-button>
@@ -46,6 +49,13 @@
                         <mat-label>Email address</mat-label>
                         <input matInput placeholder="yourname@example.com" type="email" formControlName="email" required>
                         <mat-icon matSuffix>email</mat-icon>
+                        <mat-error *ngIf="registerForm.controls.email.errors?.required">You must enter a value</mat-error>
+                        <mat-error *ngIf="registerForm.controls.email.errors?.email">
+                            You have entered an invalid email address
+                        </mat-error>
+                        <mat-error *ngIf="registerForm.controls.email.errors?.duplicateEmail">
+                            This email address is already registered
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div>
@@ -56,6 +66,10 @@
                             [attr.aria-pressed]="hide">
                             <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
+                        <mat-error *ngIf="registerForm.controls.password.errors?.required">You must enter a value</mat-error>
+                        <mat-error *ngIf="registerForm.controls.password.errors?.pattern">
+                            Your password doesn't fulfill all the criteria
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div>
@@ -66,6 +80,8 @@
                             [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hideConfirmPass">
                             <mat-icon>{{hideConfirmPass ? 'visibility_off' : 'visibility'}}</mat-icon>
                         </button>
+                        <mat-error *ngIf="confirmPass.errors?.required">Re-enter you password</mat-error>
+                        <mat-error *ngIf="confirmPass.errors?.confirmPwdMatch">Your have entered a different password</mat-error>
                     </mat-form-field>
                 </div>
 

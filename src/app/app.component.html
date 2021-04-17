@@ -1,3 +1,7 @@
-<div class="main-container">
+<div class="sign-out" *ngIf="!!authService.getLoggedInUser()">
+    <button mat-raised-button (click)="logout()">Sign out</button>
+</div>
+
+<div class="main-container" [class.is-logged-in]="!!authService.getLoggedInUser()">
     <router-outlet></router-outlet>
 </div>

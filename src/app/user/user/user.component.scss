@@ -15,6 +15,7 @@
 .card {
     width: 600px;
     height: 200px;
+    margin-bottom: 20px;
 
     .content-container {
         width: 384px;
@@ -23,8 +24,8 @@
         left: 216px;
         padding: 0px 16px;
 
-        .title, .details { display: flex; }
-        .title { justify-content: space-between; }
+        .card-title, .details { display: flex; }
+        .card-title { justify-content: space-between; }
         .details { 
             & > * { padding-right: 16px; }
         }
@@ -38,4 +39,9 @@
     & > .item {
         margin-right: 10px;
     }
+}
+
+.center-align {
+    display: flex;
+    align-items: center;
 }

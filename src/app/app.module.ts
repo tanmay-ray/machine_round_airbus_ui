@@ -9,14 +9,18 @@ import { AuthenticationModule } from './authentication/authentication.module';
 import { UserModule } from './user/user.module';
 import { AuthInterceptorService } from './service/auth-interceptor.service';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
+import { UnauthorisedComponent } from './unauthorised/unauthorised.component';
+import { SharedModule } from './shared/shared.module';
 
 @NgModule({
   declarations: [
-    AppComponent
+    AppComponent,
+    UnauthorisedComponent
   ],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    SharedModule,
     AppRoutingModule,
     AuthenticationModule,
     UserModule
