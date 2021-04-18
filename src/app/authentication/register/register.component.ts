@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AbstractControl, AsyncValidatorFn, FormControl, FormGroup, ValidatorFn, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
@@ -10,7 +10,7 @@ import { AuthService } from '../auth.service';
   templateUrl: './register.component.html',
   styleUrls: ['./register.component.scss']
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent {
 
   hide = true;
   hideConfirmPass = true;
@@ -45,9 +45,6 @@ export class RegisterComponent implements OnInit {
     this.createRegistrationForm();
   }
 
-  ngOnInit(): void {
-  }
-
   createRegistrationForm() {
     this.registerForm = new FormGroup({
       name: new FormControl('', Validators.required),
@@ -71,10 +68,7 @@ export class RegisterComponent implements OnInit {
       console.error(err);
       this.registerError = true;
       return EMPTY;
-    })).subscribe(() => {
-      const loggedInUser = this.authService.getLoggedInUser();
-      this.router.navigate([loggedInUser?.isAdmin ? 'users' : 'user']);
-    });
+    })).subscribe(() => this.router.navigate(['user']));
   }
 
 }

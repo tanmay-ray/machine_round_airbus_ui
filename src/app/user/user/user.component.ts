@@ -16,21 +16,28 @@ export class UserComponent implements OnInit {
   loading: boolean;
   loadingError: boolean;
 
-  constructor(private userService: UserService, route: ActivatedRoute) {
-    this.isAdmin = route.snapshot.data.loggedInUser.isAdmin;
-    this.email = route.snapshot.queryParams?.user || route.snapshot.data.loggedInUser.email;
+  constructor(private userService: UserService, private route: ActivatedRoute) { }
+
+  setup() {
+    this.isAdmin = this.route.snapshot.data.loggedInUser.isAdmin;
+    this.email = this.route.snapshot.queryParams?.user || this.route.snapshot.data.loggedInUser.email;
     this.loading = !!this.email;
     this.loadingError = !this.loading;
   }
 
-  ngOnInit(): void {
-    if (this.loading) {
-      this.userService.getUser(this.email)
-        .pipe(finalize(() => this.loading = false))
-        .subscribe(user => this.user = user, err => {
+  loadUser() {
+    this.userService.getUser(this.email).pipe(finalize(() => this.loading = false))
+      .subscribe(user => this.user = user,
+        err => {
           console.error(err);
           this.loadingError = true;
         });
+  }
+
+  ngOnInit(): void {
+    this.setup();
+    if (this.loading) {
+      this.loadUser();
     }
   }
 

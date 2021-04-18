@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { EMPTY } from 'rxjs';
-import { catchError, filter, skipUntil, take } from 'rxjs/operators';
+import { catchError } from 'rxjs/operators';
 import { AuthService } from '../auth.service';
 
 @Component({
@@ -9,16 +9,13 @@ import { AuthService } from '../auth.service';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss']
 })
-export class LoginComponent implements OnInit {
+export class LoginComponent {
   hide = true;
   email: string;
   password: string;
   loginError = false;
 
   constructor(private router: Router, private authService: AuthService) { }
-
-  ngOnInit(): void {
-  }
 
   login() {
     this.loginError = false;
