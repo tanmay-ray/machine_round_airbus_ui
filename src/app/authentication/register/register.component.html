@@ -86,7 +86,7 @@
                 </div>
 
                 <button mat-flat-button color="primary" class="full-width register-btn"
-                    [disabled]="registerForm.invalid" (click)="createUser()">Create account</button>
+                    [disabled]="registerForm.invalid || confirmPass.invalid" (click)="createUser()">Create account</button>
             </form>
         </mat-card-content>
     </mat-card>
